@@ -1,0 +1,3 @@
+*.o
+exp.so
+RedisModulesSDK/rmutil/*.o

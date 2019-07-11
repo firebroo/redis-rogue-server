@@ -4,19 +4,18 @@ ifndef RM_INCLUDE_DIR
 endif
 
 ifndef RMUTIL_LIBDIR
-	RMUTIL_LIBDIR=rmutil
+	RMUTIL_LIBDIR=RedisModulesSDK/rmutil
 endif
 
 ifndef SRC_DIR
-	SRC_DIR=example
+	SRC_DIR=RedisModulesSDK/exp
 endif
 
+all: exp.so
 
-all: module.so
-
-module.so:
+exp.so:
 	$(MAKE) -C ./$(SRC_DIR)
-	cp ./$(SRC_DIR)/module.so .
+	cp ./$(SRC_DIR)/exp.so .
 
 clean: FORCE
 	rm -rf *.xo *.so *.o
