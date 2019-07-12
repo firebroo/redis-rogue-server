@@ -21,13 +21,17 @@ endif
 CXXFLAGS = -I$(RM_INCLUDE_DIR) -Wall -g -fPIC -std=c++11  
 CC=g++
 
-all: rmutil exp.so
+%.o: %.cpp
+	@echo CXX $<
+	@$(CXX) $(CXXFLAGS) -c $^ -o $@
+
+all: rmutil module.so
 
 rmutil: FORCE
 	$(MAKE) -C $(RMUTIL_LIBDIR)
 
-exp.so: exp.o
-	$(LD) -o $@ exp.o $(SHOBJ_LDFLAGS) $(LIBS) -L$(RMUTIL_LIBDIR) -lrmutil -lc 
+module.so: module.o process.o
+	$(LD) -o $@ process.o module.o $(SHOBJ_LDFLAGS) $(LIBS) -L$(RMUTIL_LIBDIR) -lrmutil -lc 
 
 clean:
 	rm -rf *.xo *.so *.o

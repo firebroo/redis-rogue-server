@@ -1,3 +1,4 @@
 *.o
-exp.so
 RedisModulesSDK/rmutil/*.o
+RedisModulesSDK/rmutil/*.a
+*.so

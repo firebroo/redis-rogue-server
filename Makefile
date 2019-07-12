@@ -8,14 +8,14 @@ ifndef RMUTIL_LIBDIR
 endif
 
 ifndef SRC_DIR
-	SRC_DIR=RedisModulesSDK/exp
+	SRC_DIR=RedisModulesSDK/module
 endif
 
-all: exp.so
+all: module.so
 
-exp.so:
+module.so:
 	$(MAKE) -C ./$(SRC_DIR)
-	cp ./$(SRC_DIR)/exp.so .
+	cp ./$(SRC_DIR)/module.so .
 
 clean: FORCE
 	rm -rf *.xo *.so *.o
