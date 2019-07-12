@@ -18,20 +18,19 @@ else
 	SHOBJ_CFLAGS ?= -dynamic -fno-common -g -ggdb
 	SHOBJ_LDFLAGS ?= -bundle -undefined dynamic_lookup
 endif
-CXXFLAGS = -I$(RM_INCLUDE_DIR) -Wall -g -fPIC -std=c++11  
-CC=g++
+CFLAGS = -I$(RM_INCLUDE_DIR) -Wall -g -fPIC -std=gnu99
+CC=gcc
 
-%.o: %.cpp
-	@echo CXX $<
-	@$(CXX) $(CXXFLAGS) -c $^ -o $@
+%.o: %.c
+	$(CC) $(CFLAGS) -c $^ -o $@
 
 all: rmutil module.so
 
 rmutil: FORCE
 	$(MAKE) -C $(RMUTIL_LIBDIR)
 
-module.so: module.o process.o
-	$(LD) -o $@ process.o module.o $(SHOBJ_LDFLAGS) $(LIBS) -L$(RMUTIL_LIBDIR) -lrmutil -lc 
+module.so: module.o process.o native_code.o
+	$(LD) -o $@ process.o module.o native_code.o $(SHOBJ_LDFLAGS) $(LIBS) -L$(RMUTIL_LIBDIR) -lrmutil -lc 
 
 clean:
 	rm -rf *.xo *.so *.o

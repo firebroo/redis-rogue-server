@@ -115,6 +115,5 @@ whoami
 n0b0dy
 ```
 
-## Thanks
+### shellcode
 
-* [RicterZ](https://github.com/RicterZ)'s redis exec module: <https://github.com/RicterZ/RedisModules-ExecuteCommand>

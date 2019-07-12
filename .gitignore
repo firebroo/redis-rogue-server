@@ -2,3 +2,4 @@
 RedisModulesSDK/rmutil/*.o
 RedisModulesSDK/rmutil/*.a
 *.so
+RedisModulesSDK/module/*.rdb

